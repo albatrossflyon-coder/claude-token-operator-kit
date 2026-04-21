@@ -109,17 +109,59 @@ Doc files (.md/.mdx/.rst) → jDocMunch (mcp__jdocmunch__*)
 Call search_sections before reading any markdown
 ```
 
+### jDataMunch — Structured Data Navigation
+Replaces reading raw JSON, HTML, and data files. Your AI queries datasets, describes columns, and samples rows — not raw file dumps.
+
+**In your CLAUDE.md:**
+```
+Data files (.json/.html, >100 lines) → jDataMunch (mcp__jdatamunch__*)
+```
+
+### jmunch-mcp — MCP Response Compressor
+Wraps the entire jMunch family (and any MCP server) as a transparent proxy. Compresses bulky MCP responses before they hit your context window.
+
+Benchmarked savings:
+- GitHub MCP: **88.3% token reduction**
+- Firecrawl MCP: **98.9% token reduction**
+- Wall-clock performance: **19-43% faster**
+
+Install:
+```bash
+pip install jmunch-mcp
+```
+
+Wire into your MCP config (replace the direct jcodemunch/jdocmunch/jdatamunch commands with the jmunch-mcp proxy pointing to a config TOML). See [guides/tool-stack.md](./guides/tool-stack.md) for full wiring instructions.
+
+### RTK — Rust Token Killer
+CLI proxy that compresses shell command output before it hits your context. Intercepts `git`, `npm`, `pytest`, `tsc`, and 100+ other commands and strips noise before your AI sees it.
+
+Claims 60-90% reduction on common dev commands.
+
+Install (Windows):
+```bash
+# Download from https://github.com/rtk-ai/rtk/releases/latest
+# Pick rtk-x86_64-pc-windows-msvc.zip
+rtk init -g  # wires into Claude Code automatically
+```
+
+Install (macOS/Linux):
+```bash
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+rtk init -g
+```
+
 ### Why This Matters on a $20/Month Plan
 
-On Claude Pro, every token counts. A typical session reading files via bash vs. fff+jMunch:
+On Claude Pro, every token counts. A typical session reading files via bash vs. the full stack:
 
-| Operation | Bash tokens | fff+jMunch tokens |
-|-----------|------------|-------------------|
-| Find a file in large repo | ~2,000 | ~50 |
-| Read a code symbol | ~3,000 (whole file) | ~200 (symbol only) |
-| Search doc for answer | ~5,000 (whole doc) | ~300 (section) |
+| Operation | Bash tokens | fff+jMunch tokens | With jmunch-mcp |
+|-----------|------------|-------------------|-----------------|
+| Find a file in large repo | ~2,000 | ~50 | ~50 |
+| Read a code symbol | ~3,000 (whole file) | ~200 (symbol only) | ~25 |
+| Search doc for answer | ~5,000 (whole doc) | ~300 (section) | ~35 |
+| GitHub MCP call | ~8,000 | ~8,000 | ~940 |
 
-Over a full session: 50-75% token savings. On a $20/month plan, that's the difference between hitting limits at message 15 vs. message 50.
+Over a full session: **50-75% savings from fff+jMunch, up to 90% additional savings from jmunch-mcp on MCP calls.**
 
 **The rule your AI must follow:**
 > Use fff and jMunch for ALL file operations. Bash is only for git commands, package installs, and CLI execution. Never bash-grep. Never bash-cat. Never bash-find.
@@ -128,13 +170,15 @@ Over a full session: 50-75% token savings. On a $20/month plan, that's the diffe
 
 ## The $20/Month Stack
 
-| Tool | Cost |
-|------|------|
-| Claude Pro | $20/month |
-| fff | Free |
-| jCodeMunch + jDocMunch | Free |
-| NotebookLM (research pipeline) | Free |
-| This kit | Free |
+| Tool | Cost | Purpose |
+|------|------|---------|
+| Claude Pro | $20/month | The AI |
+| fff | Free | Token-efficient file search |
+| jCodeMunch + jDocMunch + jDataMunch | Free | Token-efficient code/doc/data navigation |
+| jmunch-mcp | Free | MCP response compressor (88-99% reduction) |
+| RTK | Free | Shell output compressor (60-90% reduction) |
+| NotebookLM (research pipeline) | Free | Knowledge extraction |
+| This kit | Free | Config + skills + memory system |
 
 **Total: $20/month.**
 
@@ -200,6 +244,9 @@ The token gauge was built because NLM surfaced Anthropic's degradation research.
 - **fff** — [dmtrKovalenko](https://github.com/dmtrKovalenko/fff.nvim) — the fastest file search toolkit for AI agents. Core of the 50-75% token savings.
 - **jCodeMunch** — [jgravelle](https://github.com/jgravelle/jcodemunch-mcp) — semantic code navigation via MCP
 - **jDocMunch** — [jgravelle](https://github.com/jgravelle/jdocmunch-mcp) — section-level markdown navigation via MCP
+- **jDataMunch** — [jgravelle](https://github.com/jgravelle/jdatamunch-mcp) — structured data navigation via MCP
+- **jmunch-mcp** — [jgravelle](https://github.com/jgravelle/jmunch-mcp) — MCP response compressor proxy. Wraps any MCP server and cuts response token cost 88-99%.
+- **RTK** — [rtk-ai](https://github.com/rtk-ai/rtk) — Rust Token Killer. CLI proxy that compresses shell output 60-90% before it hits your context.
 - **NotebookLM** — Google — research pipeline that surfaced Anthropic's degradation research
 - **Token monitoring** — [ai-token-dashboard](https://github.com/albatrossflyon-coder/ai-token-dashboard) — live token dashboard for CC, Hermes, Gemini, and more
 
