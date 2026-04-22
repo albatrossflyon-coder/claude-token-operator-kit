@@ -6,6 +6,12 @@
 - **Accept redirects** — if stopped mid-response, don't resist. Restart from the new direction.
 - **Context at 50% = compact** — accuracy degrades at message 30+. Run /compact at 50% context to reset.
 
+## RTK — Rust Token Killer (active)
+All Bash commands are intercepted and compressed by RTK before hitting context.
+- Install: `rtk init -g` — see `guides/token-stack.md`
+- Verify: `rtk init --show` | Check savings: `rtk gain`
+- NEVER run Bash without RTK wired — it's the first install step
+
 ## Tool Priority (Token-Efficient Navigation)
 
 ### Four-Tier System
@@ -41,3 +47,6 @@
 - Commit after every working feature
 - Use /plan for any task over 5 minutes
 - One task at a time — confirm before moving on
+
+## Full Token Stack Setup
+See `guides/token-stack.md` — RTK + jMunch + fff install guide in one place.
