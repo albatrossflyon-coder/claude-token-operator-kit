@@ -24,6 +24,27 @@ Before writing the file, collect:
 - Note any errors encountered and how they were resolved (or not)
 - Check current test/build status if relevant
 
+### Step 1b: Verify pending items before listing them
+
+**This step is mandatory.** Before writing any item to "Pending", "Next Steps", or "What Has NOT Been Tried Yet", verify it is actually undone. Never carry over an item based on memory alone.
+
+For each candidate pending item, run the appropriate check:
+
+| Item type | Verification command |
+|-----------|---------------------|
+| Tool install | `tool --version` or `tool init --show` |
+| Hook/config change | Read the relevant settings.json or CLAUDE.md |
+| Repo push | `git log --oneline -5` in that repo |
+| File edit | Read the target file and confirm the change isn't there |
+| Script/scheduler | Check Task Scheduler or cron with the relevant list command |
+
+**Verdict rules:**
+- If verification confirms it IS done → mark ✅ DONE, do not list as pending
+- If verification fails or item genuinely not done → list as pending with the exact verification command so the next session can re-check in 10 seconds instead of re-discovering over 10 minutes
+- If the item cannot be verified without user input → note it explicitly: `[NEEDS CHRIS TO VERIFY: <what to check>]`
+
+**The rule:** If something was on last session's pending list and you haven't verified it's still undone, do not carry it forward. Carrying over ghost tasks wastes entire sessions re-discovering already-done work.
+
 ### Step 2: Create the sessions folder if it doesn't exist
 
 Create the canonical sessions folder in the user's Claude home directory:
