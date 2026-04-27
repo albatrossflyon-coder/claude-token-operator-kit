@@ -89,16 +89,31 @@ NEVER use bash find, ls, grep, or rg for file operations
 
 Without this rule, your agent will default to bash. With it, token usage on file ops drops 70%+.
 
-Install: [link pending approval]
+Install (Windows — download prebuilt binary):
+```bash
+# Download fff-mcp-x86_64-pc-windows-msvc.exe from:
+# https://github.com/dmtrKovalenko/fff.nvim/releases/latest
+# Place at: C:\Users\<you>\.local\bin\fff-mcp.exe
+# Current stable: v0.6.4
+```
 
-### jCodeMunch — Semantic Code Navigation
+Install (macOS/Linux — run the install script):
+```bash
+curl -fsSL https://raw.githubusercontent.com/dmtrKovalenko/fff.nvim/main/install-mcp.sh | sh
+```
+
+### jCodeMunch — Semantic Code Navigation (v1.80.1)
 Replaces reading entire code files. Your AI gets symbol definitions, references, and call graphs — not 500 lines of raw source.
+
+**New in v1.80+: Gateway Mode v2** — jMunch now works as a universal proxy for ANY AI application using the OpenAI or Anthropic HTTP APIs, not just MCP servers. Zero code changes required. Benchmarked: 95–98.9% token reduction on wrapped apps.
 
 **In your CLAUDE.md:**
 ```
 Code files (.py/.ts/.tsx) → jCodeMunch (mcp__jcodemunch__*)
 Call list_repos before reading any code file
 ```
+
+**Critical: MCP vs CLI token cost.** MCP servers load their full tool definitions into every message turn — even when you never call them. A session with 5 heavy MCPs can carry 70k tokens of dead weight per turn. CLIs cost zero tokens when idle, only tokens when called. If a tool has a CLI equivalent, prefer it. Switching MCPs to CLIs can save 40% of your session tokens before you write a single line of code.
 
 ### jDocMunch — Section-Level Doc Navigation
 Replaces reading entire markdown docs. Your AI queries specific sections, not whole files.
