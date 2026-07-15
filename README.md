@@ -1,5 +1,9 @@
 # claude-token-operator-kit
 
+<p align="center">
+  <img src="docs/banner-walk.gif" alt="claude-token-operator-kit" width="100%"/>
+</p>
+
 Everything you need to run Claude Code (or any AI coding agent) professionally on $20/month.
 
 Not a tutorial. A working system. Drop it in, configure it, and your AI agent becomes a different tool.
