@@ -94,7 +94,7 @@ Install (Windows — download prebuilt binary):
 # Download fff-mcp-x86_64-pc-windows-msvc.exe from:
 # https://github.com/dmtrKovalenko/fff.nvim/releases/latest
 # Place at: C:\Users\<you>\.local\bin\fff-mcp.exe
-# Current stable: v0.6.4
+# Current stable: v0.9.6
 ```
 
 Install (macOS/Linux — run the install script):
@@ -165,6 +165,25 @@ curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/instal
 rtk init -g
 ```
 
+### jragmunch — Headless Claude RAG CLI
+Wraps `claude -p` (headless Claude Code) with jcodemunch retrieval pre-wired, so batch/scripted calls pull relevant code slices on demand instead of stuffing whole files into the prompt. Auth-agnostic — runs against your Claude subscription's Agent SDK credit by default ($0 actual cost within the monthly credit), or `--use-api` for team/CI use per Anthropic's TOS.
+
+Verbs: `ask`, `index`, `run`, `review`, `changelog`, `refactor`, `tests`, `sweep`, `doctor`.
+
+**In your CLAUDE.md / scripts, use it for:**
+```
+Batch/scripted Claude calls (PR review, changelog, fan-out refactors) → jragmunch
+Requires jcodemunch-mcp registered as an MCP server
+```
+
+Install:
+```bash
+pip install jragmunch
+jragmunch doctor
+```
+
+Repo: [jgravelle/jragmunch-cli](https://github.com/jgravelle/jragmunch-cli)
+
 ### Why This Matters on a $20/Month Plan
 
 On Claude Pro, every token counts. A typical session reading files via bash vs. the full stack:
@@ -191,6 +210,7 @@ Over a full session: **50-75% savings from fff+jMunch, up to 90% additional savi
 | fff | Free | Token-efficient file search |
 | jCodeMunch + jDocMunch + jDataMunch | Free | Token-efficient code/doc/data navigation |
 | jmunch-mcp | Free | MCP response compressor (88-99% reduction) |
+| jragmunch | Free | Token-efficient RAG CLI for headless Claude |
 | RTK | Free | Shell output compressor (60-90% reduction) |
 | NotebookLM (research pipeline) | Free | Knowledge extraction |
 | This kit | Free | Config + skills + memory system |
@@ -261,6 +281,7 @@ The token gauge was built because NLM surfaced Anthropic's degradation research.
 - **jDocMunch** — [jgravelle](https://github.com/jgravelle/jdocmunch-mcp) — section-level markdown navigation via MCP
 - **jDataMunch** — [jgravelle](https://github.com/jgravelle/jdatamunch-mcp) — structured data navigation via MCP
 - **jmunch-mcp** — [jgravelle](https://github.com/jgravelle/jmunch-mcp) — MCP response compressor proxy. Wraps any MCP server and cuts response token cost 88-99%.
+- **jragmunch** — [jgravelle](https://github.com/jgravelle/jragmunch-cli) — token-efficient RAG CLI for headless Claude, jcodemunch retrieval pre-wired.
 - **RTK** — [rtk-ai](https://github.com/rtk-ai/rtk) — Rust Token Killer. CLI proxy that compresses shell output 60-90% before it hits your context.
 - **NotebookLM** — Google — research pipeline that surfaced Anthropic's degradation research
 - **Token monitoring** — [ai-token-dashboard](https://github.com/albatrossflyon-coder/ai-token-dashboard) — live token dashboard for CC, Hermes, Gemini, and more
